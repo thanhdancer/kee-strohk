@@ -11,6 +11,13 @@ namespace HackathonEdTechLab
 {
     class Program
     {
+        private static string[] commonChars = new string[] { "in", "th", "ti", "on", "an", "he", "at", "er", "re",
+                                                        "nd", "ha", "en", "to", "it", "ou", "ea", "hi", "is",
+                                                        "or", "te", "ng", "nh", "th", "ai"};
+        private static string[] commonWords = new string[] { "for", "and", "the", "is", "it", "you", "have", "of", "be",
+                                                        "to", "that", "he", "she", "this", "they", "will", "i", "all",
+                                                        "a", "him", "ta", "xa", "da", "cho"};
+
         static void Main(string[] args)
         {
             string fileName = "";
@@ -24,13 +31,12 @@ namespace HackathonEdTechLab
                 fileName = args[0];
             }
 
-            var listFeature = ReadFile(fileName);
-            var listData = CreateData(listFeature);
+            var listChar = ReadFile(fileName);
 
             // write list of words
-            var listWords = CreateWords(listFeature);
+            var listWords = CreateWords(listChar);
             WriteWords("words.txt", listWords);
-            WriteFile("Vector.txt", listData);
+            CreateData(listChar, listWords);
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
@@ -73,7 +79,7 @@ namespace HackathonEdTechLab
             return result;
         }
 
-        public static void WriteFile(string fileName, List<Data> listData)
+        public static void WriteFile<T>(string fileName, List<T> listData)
         {
             var csv = new CsvWriter(File.CreateText(fileName));
             csv.Configuration.SkipEmptyRecords = true;
@@ -87,24 +93,127 @@ namespace HackathonEdTechLab
             File.WriteAllLines(fileName, listWord.Select(c => c.ToString()));
         }
 
-        public static List<Data> CreateData(List<Character> listFeature)
+        public static void CreateData(List<Character> listChar, List<Word> listWord)
         {
-            List<Data> listData = new List<Data>();
+            CalculateF1(listChar);
+            calculateF23(listChar);
+            calculateF4(listWord);
+        }
 
-            for (int index = 0; index < listFeature.Count; index++)
+        private static void calculateF23(List<Character> listChar)
+        {
+            List<F2> listF2 = new List<F2>();
+            List<F3> listF3 = new List<F3>();
+
+            for (int index = 0; index < commonChars.Length; index++)
             {
-                var data = new Data
+                listF2.Add(new F2
                 {
-                    CharCode = listFeature[index].KeyCode,
-                    F1 = listFeature[index].KeyUp - listFeature[index].KeyDown,
-                    F2 = index == listFeature.Count - 1 ? 0 : (listFeature[index + 1].KeyDown - listFeature[index].KeyUp),
-                    F3 = index == listFeature.Count - 1 ? 0 : (listFeature[index + 1].KeyDown - listFeature[index].KeyDown),
-                    F4 = 0
-                };
+                    value = commonChars[index]
+                });
 
-                listData.Add(data);
+                listF3.Add(new F3
+                {
+                    value = commonChars[index]
+                });
             }
-            return listData;
+
+            for(int index = 0; index < listChar.Count - 1; index++)
+            {
+                StringBuilder sb = new StringBuilder("");
+                sb.Append((char)listChar[index].KeyCode);
+                sb.Append((char)listChar[index + 1].KeyCode);
+
+                for(int i = 0; i < listF2.Count; i++) 
+                {
+                    if (listF2[i].value.ToUpper().Equals(sb.ToString().ToUpper()))
+                    {
+                        listF2[i].listDuration.Add(listChar[index + 1].KeyDown - listChar[index].KeyUp);
+                        listF3[i].listDuration.Add(listChar[index + 1].KeyDown - listChar[index].KeyDown);
+                    }
+                }
+            }
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"F2.txt"))
+            {
+                foreach (var item in listF2)
+                {
+                    file.WriteLine(item.value + "," + item.Avegare());
+                }
+            }
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"F3.txt"))
+            {
+                foreach (var item in listF3)
+                {
+                    file.WriteLine(item.value + "," + item.Avegare());
+                }
+            }
+        }
+
+        private static void calculateF4(List<Word> listWord)
+        {
+            List<F4> list = new List<F4>();
+            for (int index = 0; index < commonWords.Length; index++)
+            {
+                list.Add(new F4
+                {
+                    value = commonWords[index]
+                });
+            }
+
+            foreach (var w in listWord)
+            {
+                foreach (var cw in list)
+                {
+                    if (cw.value.ToUpper().Equals(w.ToString()))
+                    {
+                        cw.listDuration.Add(w.Duration());
+                    }
+                }
+            }
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"F4.txt"))
+            {
+                foreach (var item in list)
+                {
+                    file.WriteLine(item.value + "," + item.Avegare());
+                }
+            }
+        }
+
+        private static void CalculateF1(List<Character> listChar)
+        {
+            List<F1> list = new List<F1>();
+            for (int index = (int)'a'; index <= (int)'z'; index++)
+            {
+                list.Add(new F1
+                {
+                    value = (char) index
+                });
+            }
+
+            foreach (var c in listChar)
+            {
+                if((c.KeyCode >= (int)'a' && c.KeyCode <= (int)'z') ||
+                    (c.KeyCode >= (int)'A' && c.KeyCode <= (int)'Z'))
+                {
+                    int index = c.KeyCode - (int)'a';
+                    if (index < 0)
+                    {
+                        index = c.KeyCode - (int)'A';
+                    }
+                    list[index].listDuration.Add(c.KeyUp - c.KeyDown);
+                }
+            }
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"F1.txt"))
+            {
+                foreach (var item in list)
+                {
+                    file.WriteLine(item.value + "," + item.Avegare());
+                }
+            }
         }
     }
 }

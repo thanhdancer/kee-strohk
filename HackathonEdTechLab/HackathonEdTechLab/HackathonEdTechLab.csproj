@@ -48,6 +48,10 @@
     <Compile Include="Model\Biagram.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\F1.cs" />
+    <Compile Include="Model\F2.cs" />
+    <Compile Include="Model\F3.cs" />
+    <Compile Include="Model\F4.cs" />
     <Compile Include="Model\Word.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

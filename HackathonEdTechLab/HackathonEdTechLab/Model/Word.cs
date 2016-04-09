@@ -8,7 +8,7 @@ namespace HackathonEdTechLab.Model
 {
     class Word
     {
-        private List<Character> value;
+        public List<Character> value { get; set; }
 
         public Word()
         {
@@ -22,7 +22,7 @@ namespace HackathonEdTechLab.Model
         
         public string ToString()
         {
-            return new string(value.Select(c => (char)c.KeyCode).ToArray());
+            return new string(value.Select(c => (char)c.KeyCode).ToArray()).ToUpper();
         }
 
         public int Count()
@@ -33,6 +33,23 @@ namespace HackathonEdTechLab.Model
         public void Clear()
         {
             value.Clear();
+        }
+
+        public Int64 Duration()
+        {
+            if (value.Count == 0)
+            {
+                return 0;
+            }
+
+            if (value.Count == 1)
+            {
+                return value[0].KeyUp - value[0].KeyDown;
+            }
+
+            Character first = value[0];
+            Character last = value[value.Count - 1];
+            return last.KeyUp - first.KeyDown;
         }
     }
 }
