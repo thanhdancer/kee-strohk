@@ -66,4 +66,4 @@ for iDict in range(len(myDict)):
             list1[listKey[iDict] + index ] = None
 
 DataFrame = pandas.DataFrame(misWords, index=None)
-result.to_csv("featureMistakeWord.txt",index)
+DataFrame.to_csv("featureMistakeWord.txt",index=False)
