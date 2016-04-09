@@ -4,7 +4,7 @@ import pandas
 words = pandas.DataFrame.from_csv('word_count.txt', index_col=None)
 chars = pandas.DataFrame.from_csv('1gram.txt', index_col=None)
 bigrams = pandas.DataFrame.from_csv('2gram.txt', index_col=None)
-data = pandas.DataFrame.from_csv('hien.txt', index_col=None)
+data = pandas.DataFrame.from_csv('cong.txt', index_col=None)
 number_of_column = 26
 
 #calculate F1:

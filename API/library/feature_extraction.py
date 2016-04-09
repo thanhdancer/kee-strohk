@@ -1,6 +1,5 @@
 import pandas
 
-
 class FeatureExtraction:
     def __init__(self, wordcount_path, one_gram_path, two_gram_path, data, total_records=26):
         # read file
