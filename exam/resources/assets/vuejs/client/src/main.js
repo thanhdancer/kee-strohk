@@ -1,8 +1,26 @@
 import Vue from 'vue'
+import Home from './components/Home.vue'
+import LogIn from './components/LogIn.vue'
+import Assignments from './components/Assignments.vue'
 import App from './App.vue'
-
+var VueRouter = require('vue-router')
+Vue.use(VueRouter)
+Vue.use(require('vue-resource'));
+Vue.http.options.emulateJSON = true;
 /* eslint-disable no-new */
-new Vue({
-  el: 'body',
-  components: { App }
+var router = new VueRouter()
+router.map({
+    '/login': {
+        component: LogIn
+    },
+    '/home': {
+        component: Home
+    },
+    '/assignments': {
+    	component: Assignments
+    },
 })
+router.redirect({
+  '*': '/home'
+})
+router.start(App, '#app')

@@ -5,7 +5,11 @@
     <title>exam-client</title>
   </head>
   <body>
-    <app></app>
+    <div id="app">
+      <!-- route outlet -->
+      <navbar></navbar>
+      <router-view></router-view>
+    </div>
     <script src="dist/build.js"></script>
   </body>
 </html>
