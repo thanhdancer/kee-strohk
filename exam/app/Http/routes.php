@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,5 +14,10 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return view('index');
+});
+$app->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use ($app) {
+    $app->get('/', function (Request $request) use ($app) {
+    	return $request->user();
+    });
 });
