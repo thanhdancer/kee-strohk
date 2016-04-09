@@ -15,6 +15,7 @@
 </template>
 
 <script>
+var looper = require('lodash/forEachRight')
 export default {
   data: function () {
     return {
@@ -36,15 +37,17 @@ export default {
     keyup: function (e) {
       var self = this
       var keyCode = e.which || e.keyCode || 0
-      console.log(keyCode)
       var now = Date.now()
-      self.keys.forEach(function (key, i) {
-        if (key.code === keyCode) {
-          if (!key.up) {
-            key.up = now
-            self.keys.$set(i, key)
-          }
+      looper(self.keys, function (key, i) {
+        if (key.code !== keyCode) {
+          return true
         }
+        if (key.up) {
+          return true
+        }
+        key.up = now
+        self.keys.$set(i, key)
+        return false
       })
     },
     toggleResult: function () {
@@ -52,7 +55,9 @@ export default {
     },
     exportResult: function () {
       var element = document.getElementById('result')
-      console.log(element)
+      if (!element || element.innerText) {
+        return window.alert('Shit! ABORT MISSION. ABANDON SHIP')
+      }
       return this.download(element.innerText)
     },
     download: function (content) {
@@ -62,17 +67,13 @@ export default {
       if (document.createEvent) {
         var event = document.createEvent('MouseEvents')
         event.initEvent('click', true, true)
-        pom.dispatchEvent(event)
-      } else {
-        pom.click()
+        return pom.dispatchEvent(event)
       }
+      return pom.click()
     }
   },
   filters: {
     truncate: function (value, message) {
-      // if (message) {
-      //   return value.substr(message.length)
-      // }
       return value
     }
   }
