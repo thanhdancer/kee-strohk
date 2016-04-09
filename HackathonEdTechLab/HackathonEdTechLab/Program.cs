@@ -58,7 +58,7 @@ namespace HackathonEdTechLab
                 if ((listFeature[index].KeyCode >= (int)'a' && listFeature[index].KeyCode <= (int)'z') ||
                     (listFeature[index].KeyCode >= (int)'A' && listFeature[index].KeyCode <= (int)'Z'))
                 {
-                    sb.Append((char)listFeature[index].KeyCode);
+                    sb.Append(Char.ConvertFromUtf32(listFeature[index].KeyCode));
                 }
                 // not alphabet
                 else
