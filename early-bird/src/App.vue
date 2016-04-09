@@ -8,21 +8,30 @@
       <div id="download">
         <a href="#" v-on:click.prevent="toggleResult">{{ resultShown ? 'Hide' : 'Show' }} result</a>
         <a href="#" v-on:click.prevent="exportResult">Download as export.txt</a>
+        <a href="#" v-on:click.prevent="clearResult">Clear result</a>
       </div>
       <pre id="result" v-show="resultShown"><span v-for="key in keys">{{ key.code }}, {{ key.down }}, {{ key.up }}<br/></span></pre>
     </main>
   </div>
 </template>
-
 <script>
+var AVIM = require('./assets/avim.js')
 var looper = require('lodash/forEachRight')
 export default {
   data: function () {
     return {
       message: null,
       source: null,
-      keys: [],
+      keys: this.$root.Storage.fetch(),
       resultShown: true
+    }
+  },
+  watch: {
+    keys: {
+      handler: function (keys) {
+        this.$root.Storage.save(keys)
+      },
+      deep: true
     }
   },
   methods: {
@@ -60,6 +69,9 @@ export default {
       }
       return this.download(element.innerText)
     },
+    clearResult: function () {
+      this.keys = []
+    },
     download: function (content) {
       var pom = document.createElement('a')
       pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content))
@@ -70,12 +82,35 @@ export default {
         return pom.dispatchEvent(event)
       }
       return pom.click()
+    },
+    avim: function () {
+      var AVIMObj = new AVIM.Avim()
+      function AVIMAJAXFix () {
+        var a = 50
+        while (a < 5000) {
+          setTimeout(AVIM.Init(AVIMObj), a)
+          a += 50
+        }
+      }
+      // AVIMAJAXFix();
+      AVIMObj.attachEvt(document, 'mousedown', AVIMAJAXFix, false)
+      AVIMObj.attachEvt(document, 'keydown', AVIMObj.keyDownHandler, true)
+      AVIMObj.attachEvt(document, 'keypress', function (e) {
+        var a = AVIMObj.keyPressHandler(e)
+        if (a === false) {
+          if (AVIMObj.is_ie) window.event.returnValue = false
+          else e.preventDefault()
+        }
+      }, true)
     }
   },
   filters: {
     truncate: function (value, message) {
       return value
     }
+  },
+  ready: function () {
+    this.avim()
   }
 }
 </script>
