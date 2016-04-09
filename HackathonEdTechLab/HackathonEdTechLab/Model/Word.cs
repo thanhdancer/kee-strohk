@@ -8,26 +8,26 @@ namespace HackathonEdTechLab.Model
 {
     class Word
     {
-        private StringBuilder value;
+        private List<Character> value;
 
         public Word()
         {
-            value = new StringBuilder("");
+            value = new List<Character>();
         }
 
-        public void appendChar(char c)
+        public void appendChar(Character c)
         {
-            value.Append(c);
+            value.Add(c);
         }
         
         public string ToString()
         {
-            return value.ToString();
+            return new string(value.Select(c => (char)c.KeyCode).ToArray());
         }
 
         public int Count()
         {
-            return value.Length;
+            return value.Count;
         }
 
         public void Clear()

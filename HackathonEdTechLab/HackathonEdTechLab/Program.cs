@@ -36,38 +36,38 @@ namespace HackathonEdTechLab
             Console.ReadKey();
         }
 
-        public static List<Feature> ReadFile(string fileName)
+        public static List<Character> ReadFile(string fileName)
         {
             using (var csv = new CsvReader(File.OpenText(fileName)))
             {
                 csv.Configuration.IgnoreBlankLines = true;
                 csv.Configuration.IsHeaderCaseSensitive = false;
 
-                var result = csv.GetRecords<Feature>().ToList();
+                var result = csv.GetRecords<Character>().ToList();
                 return result;
             }
         }
 
-        public static List<string> CreateWords(List<Feature> listFeature)
+        public static List<Word> CreateWords(List<Character> listFeature)
         {
-            List<string> result = new List<string>();
-            StringBuilder sb = new StringBuilder("");
+            List<Word> result = new List<Word>();
+            Word word = new Word();
             for (int index = 0; index < listFeature.Count; index++)
             {
                 // alphabet character
                 if ((listFeature[index].KeyCode >= (int)'a' && listFeature[index].KeyCode <= (int)'z') ||
                     (listFeature[index].KeyCode >= (int)'A' && listFeature[index].KeyCode <= (int)'Z'))
                 {
-                    sb.Append(Char.ConvertFromUtf32(listFeature[index].KeyCode));
+                    word.appendChar(listFeature[index]);
                 }
                 // not alphabet
                 else
                 {
-                    if (sb.Length > 0)
+                    if (word.Count() > 0)
                     {
-                        result.Add(sb.ToString());
+                        result.Add(word);
                     }
-                    sb.Clear();
+                    word = new Word();
                 }
             }
             return result;
@@ -82,12 +82,12 @@ namespace HackathonEdTechLab
             csv.WriteRecords(listData);
         }
 
-        public static void WriteWords(string fileName, List<string> listWord)
+        public static void WriteWords(string fileName, List<Word> listWord)
         {
-            File.WriteAllLines(fileName, listWord);
+            File.WriteAllLines(fileName, listWord.Select(c => c.ToString()));
         }
 
-        public static List<Data> CreateData(List<Feature> listFeature)
+        public static List<Data> CreateData(List<Character> listFeature)
         {
             List<Data> listData = new List<Data>();
 

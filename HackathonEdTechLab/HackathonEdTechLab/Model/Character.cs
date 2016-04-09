@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HackathonEdTechLab.Model
 {
-    class Feature
+    class Character
     {
         public int KeyCode { get; set; }
         public Int64 KeyUp { get; set; }
