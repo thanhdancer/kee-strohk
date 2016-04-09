@@ -6,9 +6,10 @@
     <main id="main">
       <textarea v-model="message" v-on:keydown="keydown" v-on:keyup="keyup" rows="10" cols="30"></textarea>
       <div id="download">
+        <a href="#" v-on:click.prevent="toggleResult">{{ resultShown ? 'Hide' : 'Show' }} result</a>
         <a href="#" v-on:click.prevent="exportResult">Download as export.txt</a>
       </div>
-      <pre id="result"><span v-for="key in keys">{{ key.code }}, {{ key.down }}, {{ key.up }}<br/></span></pre>
+      <pre id="result" v-show="resultShown"><span v-for="key in keys">{{ key.code }}, {{ key.down }}, {{ key.up }}<br/></span></pre>
     </main>
   </div>
 </template>
@@ -18,8 +19,9 @@ export default {
   data: function () {
     return {
       message: null,
+      source: null,
       keys: [],
-      source: null
+      resultShown: true
     }
   },
   methods: {
@@ -45,6 +47,9 @@ export default {
         }
       })
     },
+    toggleResult: function () {
+      this.resultShown = !this.resultShown
+    },
     exportResult: function () {
       var element = document.getElementById('result')
       console.log(element)
@@ -54,7 +59,13 @@ export default {
       var pom = document.createElement('a')
       pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content))
       pom.setAttribute('download', 'export.txt')
-      pom.click()
+      if (document.createEvent) {
+        var event = document.createEvent('MouseEvents')
+        event.initEvent('click', true, true)
+        pom.dispatchEvent(event)
+      } else {
+        pom.click()
+      }
     }
   },
   filters: {
@@ -129,6 +140,15 @@ body {
     max-height: 300px;
     overflow-y:scroll;
     text-align: left;
+  }
+  #download {
+    a {
+      display: inline-block;
+      background-color: #42b983;
+      color: #fff!important;
+      padding: .5em 1em;
+      border-radius: 4px;
+    }
   }
 }
 </style>
