@@ -45,10 +45,11 @@
         keyup: function (e) {
           var self = this;
           var keyCode = e.which || e.keyCode || 0;
+          var now = Date.now();
           self.keys.forEach(function (key, i) {
             if (key.code == keyCode) {
               if (!key.up) {
-                key.up = Date.now();
+                key.up = now;
                 self.keys.$set(i, key);
               }
             }
