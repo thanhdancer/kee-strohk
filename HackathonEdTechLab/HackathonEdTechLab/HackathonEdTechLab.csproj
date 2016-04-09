@@ -52,6 +52,7 @@
     <Compile Include="Model\F2.cs" />
     <Compile Include="Model\F3.cs" />
     <Compile Include="Model\F4.cs" />
+    <Compile Include="Model\Frequency.cs" />
     <Compile Include="Model\Word.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

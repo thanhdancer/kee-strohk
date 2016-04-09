@@ -11,20 +11,22 @@ namespace HackathonEdTechLab
 {
     class Program
     {
-        private static string[] commonChars = new string[] { "in", "th", "ti", "on", "an", "he", "at", "er", "re",
+        const int number = 26;
+        /*
+        private static string[] commonChars = new string[] { "ng", "th", "ti", "on", "an", "he", "at", "er", "re",
                                                         "nd", "ha", "en", "to", "it", "ou", "ea", "hi", "is",
                                                         "or", "te", "ng", "nh", "th", "ai"};
         private static string[] commonWords = new string[] { "for", "and", "the", "is", "it", "you", "have", "of", "be",
                                                         "to", "that", "he", "she", "this", "they", "will", "i", "all",
                                                         "a", "him", "ta", "xa", "da", "cho"};
-
+        */
         static void Main(string[] args)
         {
             string fileName = "";
             if (args == null || args.Length < 1)
             {
                 // throw new ArgumentNullException("args");
-                fileName = "haidt4.txt";
+                fileName = "hien.txt";
             }
             else
             {
@@ -48,8 +50,14 @@ namespace HackathonEdTechLab
             {
                 csv.Configuration.IgnoreBlankLines = true;
                 csv.Configuration.IsHeaderCaseSensitive = false;
+                //csv.Configuration.IgnoreReadingExceptions = true;
 
-                var result = csv.GetRecords<Character>().ToList();
+                var result =new List<Character>();
+                while (csv.Read())
+                {
+                    var record = csv.GetRecord<Character>();
+                    result.Add(record);
+                }
                 return result;
             }
         }
@@ -102,10 +110,25 @@ namespace HackathonEdTechLab
 
         private static void calculateF23(List<Character> listChar)
         {
+            List<string> commonChars = new List<string>();
+            using (var csv = new CsvReader(File.OpenText("diagram.txt")))
+            {
+                csv.Configuration.IgnoreBlankLines = true;
+                csv.Configuration.IsHeaderCaseSensitive = false;
+                int count = 1;
+
+                while (csv.Read() && count <= number)
+                {
+                    var record = csv.GetRecord<Frequency>();
+                    commonChars.Add(record.Value);
+                    count++;
+                }
+            }
+
             List<F2> listF2 = new List<F2>();
             List<F3> listF3 = new List<F3>();
 
-            for (int index = 0; index < commonChars.Length; index++)
+            for (int index = 0; index < commonChars.Count; index++)
             {
                 listF2.Add(new F2
                 {
@@ -153,8 +176,23 @@ namespace HackathonEdTechLab
 
         private static void calculateF4(List<Word> listWord)
         {
+            List<string> commonWords = new List<string>();
+            using (var csv = new CsvReader(File.OpenText("diagram.txt")))
+            {
+                csv.Configuration.IgnoreBlankLines = true;
+                csv.Configuration.IsHeaderCaseSensitive = false;
+                int count = 1;
+
+                while (csv.Read() && count <= number)
+                {
+                    var record = csv.GetRecord<Frequency>();
+                    commonWords.Add(record.Value);
+                    count++;
+                }
+            }
+
             List<F4> list = new List<F4>();
-            for (int index = 0; index < commonWords.Length; index++)
+            for (int index = 0; index < commonWords.Count; index++)
             {
                 list.Add(new F4
                 {
