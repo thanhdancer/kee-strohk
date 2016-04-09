@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Early birth</title>
+	<link rel="stylesheet" href="">
+	<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+  <style type="text/css" media="screen">
+    #result, #source {
+      float: left;
+      width: 50%;
+    }
+  </style>
+</head>
+<body>
+	<div id="app">
+    <div id="source">
+      <textarea v-model="message" v-on:keydown="keydown" v-on:keyup="keyup" rows="10" cols="30"></textarea>
+    </div>
+    <div id="result">
+      <div v-for="key in keys">
+        {{ key.code }}, {{ key.down }}, {{ key.up }}
+      </div>
+    </div>
+	</div>
+	<script type="text/javascript">
+		new Vue({
+      el: '#app',
+      data: {
+        message: '',
+        keys: [],
+        activeKeys: []
+      },
+      methods: {
+        keydown: function (e) {
+          var key = {
+            code: e.keyCode,
+            down: Date.now(),
+            up: null
+          }
+          this.keys.push(key);
+          this.activeKeys.push(key);
+        },
+        keyup: function (e) {
+          var self = this;
+          var keyCode = e.keyCode;
+          self.keys.forEach(function (key, i) {
+            if (key.code == keyCode) {
+              if (!key.up) {
+                key.up = Date.now();
+                self.keys.$set(i, key);
+              }
+            }
+          })
+
+          // self.activeKeys.forEach(function (key) {
+          //   self.activeKeys.$remove(key)
+          // })
+        }
+      }
+    })
+	</script>
+</body>
+</html>
