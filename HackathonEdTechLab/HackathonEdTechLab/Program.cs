@@ -13,27 +13,27 @@ namespace HackathonEdTechLab
     {
         static void Main(string[] args)
         {
-            if (args == null || args.Length == 0)
+            string fileName = "";
+            if (args == null || args.Length < 1)
             {
                 // throw new ArgumentNullException("args");
+                fileName = "haidt4.txt";
+            }
+            else
+            {
+                fileName = args[0];
             }
 
-            string fileName = "haidt4.txt";
-
             var listFeature = ReadFile(fileName);
-            Console.Write((char)65);
-            
-
-
             var listData = CreateData(listFeature);
 
             // write list of words
             var listWords = CreateWords(listFeature);
             WriteWords("words.txt", listWords);
+            WriteFile("Vector.txt", listData);
 
-            WriteFile("file.txt", listData);
-
-            //Console.ReadKey();
+            Console.WriteLine("Press any key to exit.");
+            Console.ReadKey();
         }
 
         public static List<Feature> ReadFile(string fileName)
