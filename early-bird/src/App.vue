@@ -63,11 +63,10 @@ export default {
       this.resultShown = !this.resultShown
     },
     exportResult: function () {
-      var element = document.getElementById('result')
-      if (!element || element.innerText) {
-        return window.alert('Shit! ABORT MISSION. ABANDON SHIP')
-      }
-      return this.download(element.innerText)
+      var content = this.keys.map(function (key) {
+        return key.code + ', ' + key.down + ', ' + key.up
+      }).join('\n')
+      return this.download(content)
     },
     clearResult: function () {
       this.keys = []
