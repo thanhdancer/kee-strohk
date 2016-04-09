@@ -9,7 +9,7 @@ module.exports = function(){
   const app = this;
 
   const db = new NeDB({
-    filename: path.join(app.get('nedb'), 'users.db'),
+    filename: path.join(app.get('nedb'), 'papers.db'),
     autoload: true
   });
 
@@ -22,14 +22,14 @@ module.exports = function(){
   };
 
   // Initialize our service with any options it requires
-  app.use('/users', service(options));
+  app.use('/papers', service(options));
 
   // Get our initialize service to that we can bind hooks
-  const userService = app.service('/users');
+  const paperService = app.service('/papers');
 
   // Set up our before hooks
-  userService.before(hooks.before);
+  paperService.before(hooks.before);
 
   // Set up our after hooks
-  userService.after(hooks.after);
+  paperService.after(hooks.after);
 };

@@ -1,11 +1,11 @@
 {
   "host": "localhost",
   "port": 3030,
-  "mongodb": "mongodb://localhost:27017/exam",
+  "nedb": "../data/",
   "public": "../public/",
   "auth": {
     "token": {
-      "secret": "pCv8XkyI3sS9TShI7o+IRgGOQugnZc9s0lcwMgChH1fpeyfWcGxIF4BwvJ+3jEFfly2lep1nh0N9A8ORB3L8Qg=="
+      "secret": "8h+SDanbCfvn+hCBf6+TRFaNp1iaW5dzKA55Kyq+VISEpb8KBnoL0y222SNZ2UgIFZUg/szND6UNQ0pfmX/x8g=="
     },
     "local": {}
   }

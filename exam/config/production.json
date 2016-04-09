@@ -1,7 +1,7 @@
 {
   "host": "exam-app.feathersjs.com",
   "port": 80,
-  "mongodb": "DATABASE_URL",
+  "nedb": "NEDB_BASE_PATH",
   "public": "../public/",
   "auth": {
     "token": {
