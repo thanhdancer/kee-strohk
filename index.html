@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Early birth</title>
+	<title>Early bird</title>
 	<link rel="stylesheet" href="">
 	<script src="vue.js" type="text/javascript" charset="utf-8"></script>
   <style type="text/css" media="screen">
@@ -35,7 +35,7 @@
       methods: {
         keydown: function (e) {
           var key = {
-            code: e.keyCode,
+            code: e.which || e.keyCode || 0,
             down: Date.now(),
             up: null
           }
@@ -44,7 +44,7 @@
         },
         keyup: function (e) {
           var self = this;
-          var keyCode = e.keyCode;
+          var keyCode = e.which || e.keyCode || 0;
           self.keys.forEach(function (key, i) {
             if (key.code == keyCode) {
               if (!key.up) {
