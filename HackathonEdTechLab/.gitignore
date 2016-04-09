@@ -1,0 +1,4 @@
+**/*.exe
+*.suo
+HackathonEdTechLab/bin
+HackathonEdTechLab/obj
