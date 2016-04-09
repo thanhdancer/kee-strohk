@@ -19,10 +19,20 @@ namespace HackathonEdTechLab.Model
         {
             value.Append(c);
         }
-
+        
         public string ToString()
         {
             return value.ToString();
+        }
+
+        public int Count()
+        {
+            return value.Length;
+        }
+
+        public void Clear()
+        {
+            value.Clear();
         }
     }
 }

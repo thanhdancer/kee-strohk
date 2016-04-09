@@ -48,6 +48,7 @@
     <Compile Include="Model\Biagram.cs" />
     <Compile Include="Model\Feature.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\Word.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

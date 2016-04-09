@@ -21,11 +21,19 @@ namespace HackathonEdTechLab
             string fileName = "haidt4.txt";
 
             var listFeature = ReadFile(fileName);
-
+            Console.Write((char)65);
+            
 
 
             var listData = CreateData(listFeature);
-            //WriteFile("test.txt", listData);
+
+            // write list of words
+            var listWords = CreateWords(listFeature);
+            WriteWords("words.txt", listWords);
+
+            WriteFile("file.txt", listData);
+
+            //Console.ReadKey();
         }
 
         public static List<Feature> ReadFile(string fileName)
@@ -40,10 +48,30 @@ namespace HackathonEdTechLab
             }
         }
 
-        //public static List<string> CreateWords(List<Feature> listFeature)
-        //{
-
-        //}
+        public static List<string> CreateWords(List<Feature> listFeature)
+        {
+            List<string> result = new List<string>();
+            StringBuilder sb = new StringBuilder("");
+            for (int index = 0; index < listFeature.Count; index++)
+            {
+                // alphabet character
+                if ((listFeature[index].KeyCode >= (int)'a' && listFeature[index].KeyCode <= (int)'z') ||
+                    (listFeature[index].KeyCode >= (int)'A' && listFeature[index].KeyCode <= (int)'Z'))
+                {
+                    sb.Append((char)listFeature[index].KeyCode);
+                }
+                // not alphabet
+                else
+                {
+                    if (sb.Length > 0)
+                    {
+                        result.Add(sb.ToString());
+                    }
+                    sb.Clear();
+                }
+            }
+            return result;
+        }
 
         public static void WriteFile(string fileName, List<Data> listData)
         {
@@ -52,6 +80,11 @@ namespace HackathonEdTechLab
             csv.Configuration.QuoteAllFields = false;
             csv.Configuration.HasHeaderRecord = false;
             csv.WriteRecords(listData);
+        }
+
+        public static void WriteWords(string fileName, List<string> listWord)
+        {
+            File.WriteAllLines(fileName, listWord);
         }
 
         public static List<Data> CreateData(List<Feature> listFeature)
