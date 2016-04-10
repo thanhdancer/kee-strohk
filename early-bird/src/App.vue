@@ -6,20 +6,32 @@
     <main id="main">
       <textarea v-model="message" v-on:keydown="keydown" v-on:keyup="keyup" rows="10" cols="30"></textarea>
       <div id="download">
+        <a href="#" v-on:click.prevent="toggleResult">{{ resultShown ? 'Hide' : 'Show' }} result</a>
         <a href="#" v-on:click.prevent="exportResult">Download as export.txt</a>
+        <a href="#" v-on:click.prevent="clearResult">Clear result</a>
       </div>
-      <pre id="result"><span v-for="key in keys">{{ key.code }}, {{ key.down }}, {{ key.up }}<br/></span></pre>
+      <pre id="result" v-show="resultShown"><span v-for="key in keys">{{ key.code }}, {{ key.down }}, {{ key.up }}<br/></span></pre>
     </main>
   </div>
 </template>
-
 <script>
+var AVIM = require('./assets/avim.js')
+var looper = require('lodash/forEachRight')
 export default {
   data: function () {
     return {
       message: null,
-      keys: [],
-      source: null
+      source: null,
+      keys: this.$root.Storage.fetch(),
+      resultShown: true
+    }
+  },
+  watch: {
+    keys: {
+      handler: function (keys) {
+        this.$root.Storage.save(keys)
+      },
+      deep: true
     }
   },
   methods: {
@@ -34,36 +46,70 @@ export default {
     keyup: function (e) {
       var self = this
       var keyCode = e.which || e.keyCode || 0
-      console.log(keyCode)
       var now = Date.now()
-      self.keys.forEach(function (key, i) {
-        if (key.code === keyCode) {
-          if (!key.up) {
-            key.up = now
-            self.keys.$set(i, key)
-          }
+      looper(self.keys, function (key, i) {
+        if (key.code !== keyCode) {
+          return true
         }
+        if (key.up) {
+          return true
+        }
+        key.up = now
+        self.keys.$set(i, key)
+        return false
       })
     },
+    toggleResult: function () {
+      this.resultShown = !this.resultShown
+    },
     exportResult: function () {
-      var element = document.getElementById('result')
-      console.log(element)
-      return this.download(element.innerText)
+      var content = this.keys.map(function (key) {
+        return key.code + ', ' + key.down + ', ' + key.up
+      }).join('\n')
+      return this.download(content)
+    },
+    clearResult: function () {
+      this.keys = []
     },
     download: function (content) {
       var pom = document.createElement('a')
       pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content))
       pom.setAttribute('download', 'export.txt')
-      pom.click()
+      if (document.createEvent) {
+        var event = document.createEvent('MouseEvents')
+        event.initEvent('click', true, true)
+        return pom.dispatchEvent(event)
+      }
+      return pom.click()
+    },
+    avim: function () {
+      var AVIMObj = new AVIM.Avim()
+      function AVIMAJAXFix () {
+        var a = 50
+        while (a < 5000) {
+          setTimeout(AVIM.Init(AVIMObj), a)
+          a += 50
+        }
+      }
+      // AVIMAJAXFix();
+      AVIMObj.attachEvt(document, 'mousedown', AVIMAJAXFix, false)
+      AVIMObj.attachEvt(document, 'keydown', AVIMObj.keyDownHandler, true)
+      AVIMObj.attachEvt(document, 'keypress', function (e) {
+        var a = AVIMObj.keyPressHandler(e)
+        if (a === false) {
+          if (AVIMObj.is_ie) window.event.returnValue = false
+          else e.preventDefault()
+        }
+      }, true)
     }
   },
   filters: {
     truncate: function (value, message) {
-      // if (message) {
-      //   return value.substr(message.length)
-      // }
       return value
     }
+  },
+  ready: function () {
+    this.avim()
   }
 }
 </script>
@@ -129,6 +175,15 @@ body {
     max-height: 300px;
     overflow-y:scroll;
     text-align: left;
+  }
+  #download {
+    a {
+      display: inline-block;
+      background-color: #42b983;
+      color: #fff!important;
+      padding: .5em 1em;
+      border-radius: 4px;
+    }
   }
 }
 </style>
