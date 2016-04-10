@@ -43,7 +43,10 @@ $app->get('api/v1/submission/{id}/edit', ['middleware' => 'auth', function (Requ
 }]);
 $app->post('api/v1/submission/{id}/finish', ['middleware' => 'auth', function (Request $request, $id) use ($app) {
 	$submission = Submission::find($id);
-	$submission->update($request->only('keys', 'content'));
+	if ($submission->finished) {
+		return $submission;
+	}
+	$submission->update($request->only('keys', 'content', 'finished'));
 	return $submission;
 }]);
 

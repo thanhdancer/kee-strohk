@@ -20,6 +20,7 @@ export default {
         'api.submission.edit': '/api/v1/submission/{id}/edit',
         'api.submission.finish': '/api/v1/submission/{id}/finish',
         'submission.edit': '/submission/{id}/edit',
+        'assignment.show': '/assignment/{id}'
       },
       user: storage.storage.fetch('exam-keystroke:user')
     }

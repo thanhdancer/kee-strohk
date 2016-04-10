@@ -40,8 +40,14 @@ export default {
       var obj = JSON.parse(JSON.stringify(this.submission))
       obj.assignment = [];
       obj.user = {}
+      obj.api_token = self.$parent.authenticated
+      obj.finished = 1
       self.$http.post(self.$parent.route('api.submission.finish', {id: obj.id}), obj ).then(function (response) {
-        console.log(response)
+        if (response) {
+          var assignment = response.data;
+          var url = this.$parent.route('assignment.show', {id:assignment.assignment_id}, true)
+          this.$route.router.go(url);
+        }
       });
     },
     keydown: function (e) {

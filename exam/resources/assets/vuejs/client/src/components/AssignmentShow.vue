@@ -57,7 +57,6 @@ export default {
           }
           var submission = response.data;
           var url = this.$parent.route('submission.edit', {id: submission.id}, true);
-          console.log(url);
           this.$route.router.go(url);
         })
     }
