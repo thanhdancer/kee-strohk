@@ -3,6 +3,7 @@ import Home from './components/Home.vue'
 import LogIn from './components/LogIn.vue'
 import Assignments from './components/Assignments.vue'
 import AssignmentShow from './components/AssignmentShow.vue'
+import SubmissionEdit from './components/SubmissionEdit.vue'
 import App from './App.vue'
 var VueRouter = require('vue-router')
 Vue.use(VueRouter)
@@ -24,6 +25,9 @@ router.map({
     },
     '/assignment/:id': {
         component: AssignmentShow
+    },
+    '/submission/:id/edit': {
+        component: SubmissionEdit
     }
 })
 router.redirect({

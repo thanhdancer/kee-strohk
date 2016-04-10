@@ -23,7 +23,7 @@ export default {
   },
   ready: function () {
     var self = this;
-    this.$http.get(self.$parent.route('assignment.index')).then(function (response) {
+    this.$http.get(self.$parent.route('api.assignment.index')).then(function (response) {
       if (!response.data) {
         return;
       }

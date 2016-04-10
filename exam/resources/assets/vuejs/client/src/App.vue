@@ -14,10 +14,12 @@ export default {
       routes: {
         'home': '/home',
         'login': '/api/v1/login',
-        'assignment.index': '/api/v1/assignments',
-        'assignment.show': '/api/v1/assignment/{id}',
-        'assignment.do': '/api/v1/assignment/{id}/submission',
-        'submission.edit': '/api/v1/submission/{id}/edit',
+        'api.assignment.index': '/api/v1/assignments',
+        'api.assignment.show': '/api/v1/assignment/{id}',
+        'api.assignment.do': '/api/v1/assignment/{id}/submissions',
+        'api.submission.edit': '/api/v1/submission/{id}/edit',
+        'api.submission.finish': '/api/v1/submission/{id}/finish',
+        'submission.edit': '/submission/{id}/edit',
       },
       user: storage.storage.fetch('exam-keystroke:user')
     }
@@ -37,8 +39,9 @@ export default {
     }
   },
   methods: {
-    route: function (name, params) {
-      var url = this.uri.base + this.routes[name];
+    route: function (name, params, excludeUri) {
+      var excludeUri = excludeUri || false;
+      var url = excludeUri ? this.routes[name] : this.uri.base + this.routes[name];
       if (!params) {
         return url;
       }

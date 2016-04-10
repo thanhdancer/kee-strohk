@@ -1,6 +1,7 @@
 <?php
 
 use App\Assignment;
+use App\Submission;
 use Illuminate\Http\Request;
 
 /*
@@ -26,3 +27,23 @@ $app->get('api/v1/assignment/{id}', ['middleware' => 'auth', function (Request $
 		$query->where('user_id', $request->user()->id);
 	}])->find($id);
 }]);
+$app->put('api/v1/assignment/{id}/submissions', ['middleware' => 'auth', function (Request $request, $id) use ($app) {
+	$assignment = Assignment::find($id);
+	if ($assignment->submissions()->where('finished', false)->count() > 0) {
+		return $assignment->submissions()->where('finished', false)->first();
+	}
+	return $assignment->submissions()->create([
+		'content' => null,
+		'finished' => false,
+		'user_id' => $request->user()->id
+	]);
+}]);
+$app->get('api/v1/submission/{id}/edit', ['middleware' => 'auth', function (Request $request, $id) use ($app) {
+	return Submission::with('assignment', 'user')->find($id);
+}]);
+$app->post('api/v1/submission/{id}/finish', ['middleware' => 'auth', function (Request $request, $id) use ($app) {
+	$submission = Submission::find($id);
+	$submission->update($request->only('keys', 'content'));
+	return $submission;
+}]);
+

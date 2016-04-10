@@ -12,7 +12,7 @@ class Submission extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'content', 'finished', 'user_id', 'assignment_id'
+        'id', 'content', 'finished', 'user_id', 'assignment_id', 'keys'
     ];
 
     public function user()

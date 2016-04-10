@@ -19,7 +19,8 @@ class CreateSubmissionsTable extends Migration
             $table->integer('assignment_id')->unsigned()->index()->nullable();
             $table->foreign('assignment_id')->references('id')->on('assignments')->onDelete('cascade');
             $table->boolean('finished');
-            $table->text('content');
+            $table->text('content')->nullable();
+            $table->longText('keys');
             $table->timestamps();
         });
     }
