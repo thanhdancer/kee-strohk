@@ -12,9 +12,15 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 50)->create()->first()->update([
-        	'email' => 'hiendv@keystroke.dev',
-        	'password' => Hash::make('hiendv'),
+        factory(App\User::class, 50)->create();
+        $user = App\User::find(1)->update([
+            'name' => 'thanhvc',
+            'email' => 'thanhvc@keystroke.dev',
+            'password' => Hash::make('123456'),
+        ]);
+        $user = App\User::find(2)->update([
+            'email' => 'linh@keystroke.dev',
+            'password' => Hash::make('123456'),
         ]);
     }
 }
