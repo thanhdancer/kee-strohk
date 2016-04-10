@@ -1,34 +1,12 @@
-import pandas
-import sys
-
-# read file
-words = pandas.DataFrame.from_csv('word_count.txt', index_col=None)
-chars = pandas.DataFrame.from_csv('1gram.txt', index_col=None)
-bigrams = pandas.DataFrame.from_csv('2gram.txt', index_col=None)
-data = pandas.DataFrame.from_csv(sys.argv[1], index_col=None)
-raw = pandas.DataFrame.from_csv(sys.argv[1], index_col=None)
-
-#calculate F1:
-F1 = data['KeyCode']
-F1 = pandas.DataFrame(F1, columns=['KeyCode'])
-F1['duration'] = data['KeyUp'] - data['KeyDown']
-F1['delay'] = 0
-
-#calculate F2, F3:
-listHai = data.values.T.tolist()
-length = len(listHai[0])
-
-for index1 in xrange(length):
-	if index1 != 0:
-		F1.set_value(index1,'delay',listHai[1][index1] - listHai[2][index1-1])
-
-# Code from Cong Lua To
+import pandas 
+import numpy
+raw = pandas.read_csv('hien.txt',index_col = None,header=None)
 backSpaceKeyCode =8
 shiftKeyCode = 16
 count = 0
 flag = False
 i = 0
-list0 = raw['KeyCode'].values.tolist()
+list0 = raw[0].values.tolist()
 myDict = {}
 misWords = [0] * len(list0)
 
@@ -87,7 +65,5 @@ for iDict in range(len(myDict)):
                 list1[listKey[iDict] + index +1] = None
             list1[listKey[iDict] + index ] = None
 
-dataFrame = pandas.DataFrame(misWords, index=None, columns=['misWords'])
-F1['misWords'] = dataFrame.as_matrix()
-F1['name'] = sys.argv[1].split('.')[0]
-F1.to_csv('Feature_%s' % sys.argv[1], index=False)
+DataFrame = pandas.DataFrame(misWords, index=None)
+DataFrame.to_csv("featureMistakeWord.txt",index=False)
