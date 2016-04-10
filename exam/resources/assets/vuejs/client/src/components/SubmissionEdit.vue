@@ -11,12 +11,15 @@
         </div>
       </div>
       <div class="col-md-5">
-        <form v-on:submit.prevent="onSubmit">
+        <form v-on:submit.prevent="onSubmit" v-if="!submission.finished">
           <div class="form-group">
             <textarea v-model="submission.content" v-on:keydown="keydown" v-on:keyup="keyup" rows="30" cols="30" class="form-control"></textarea>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
+        <div v-if="submission.finished">
+          Trạng thái: {{ submission.status }}
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +32,7 @@ export default {
     return {
       keys: [],
       submission: {
+        finished: false,
         assignment: {}
       }
     }

@@ -21,6 +21,7 @@ class CreateSubmissionsTable extends Migration
             $table->boolean('finished');
             $table->text('content')->nullable();
             $table->longText('keys');
+            $table->string('status');
             $table->timestamps();
         });
     }
