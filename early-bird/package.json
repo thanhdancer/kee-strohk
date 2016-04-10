@@ -1,7 +1,7 @@
 {
   "name": "early-bird",
   "version": "1.0.0",
-  "description": "Once upon a time",
+  "description": "Everything starts from something",
   "author": "hiendv",
   "private": true,
   "scripts": {
@@ -60,6 +60,7 @@
     "ora": "^0.2.0",
     "phantomjs-prebuilt": "^2.1.3",
     "sass-loader": "^3.2.0",
+    "script-loader": "^0.6.1",
     "selenium-server": "2.53.0",
     "shelljs": "^0.6.0",
     "sinon": "^1.17.3",
