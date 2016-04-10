@@ -1,6 +1,6 @@
 import pandas 
 import numpy
-raw=pandas.DataFrame.from_csv('hien.txt', index_col=None)
+raw=pandas.read_csv('hien.txt', index_col=None)
 backSpaceKeyCode =8
 shiftKeyCode = 16
 count = 0
