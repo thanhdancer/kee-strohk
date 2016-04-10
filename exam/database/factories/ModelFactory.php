@@ -20,3 +20,11 @@ $factory->define(App\User::class, function ($faker) {
         'api_token' => Str::random(60)
     ];
 });
+$factory->define(App\Assignment::class, function ($faker) {
+    return [
+        'name' => $faker->name,
+        'description' => $faker->paragraph,
+        'content' => $faker->text(2000)
+    ];
+});
+

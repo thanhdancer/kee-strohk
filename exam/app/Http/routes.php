@@ -1,5 +1,6 @@
 <?php
 
+use App\Assignment;
 use Illuminate\Http\Request;
 
 /*
@@ -16,11 +17,12 @@ use Illuminate\Http\Request;
 $app->get('/', function () use ($app) {
     return view('index');
 });
-$app->group(['prefix' => 'api/v1', 'middleware' => 'cors'], function () use ($app) {
-	$app->group(['middleware' => 'auth'], function () use ($app) {
-	    $app->get('/me', function (Request $request) use ($app) {
-	    	return $request->user();
-	    });
-	});
-	$app->post('/login', 'App\Http\Controllers\AuthController@login');
+$app->post('api/v1/login', 'AuthController@login');
+$app->get('api/v1/assignments', function () use ($app) {
+	return Assignment::with('users')->get();
 });
+$app->get('api/v1/assignment/{id}', ['middleware' => 'auth', function (Request $request, $id) use ($app) {
+	return Assignment::with(['submissions' => function ($query) use ($request) {
+		$query->where('user_id', $request->user()->id);
+	}])->find($id);
+}]);

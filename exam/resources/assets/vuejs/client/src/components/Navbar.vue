@@ -13,7 +13,7 @@
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li v-link="{ path: '/home', activeClass: 'active' }"><a href="#" v-link="{ path: '/home' }">Home</a></li>
-          <li v-link="{ path: '/assignments', activeClass: 'active' }"><a href="#" v-link="{ path: '/assignments' }">Assignments</a></li>
+          <li v-link="{ path: '/assignment', activeClass: 'active' }"><a href="#" v-link="{ path: '/assignment' }">Assignments</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li v-link="{ path: '/login', activeClass: 'active' }"><a href="#login" v-link="{ path: '/login' }" v-if="!$parent.authenticated">Sign In</a></li>

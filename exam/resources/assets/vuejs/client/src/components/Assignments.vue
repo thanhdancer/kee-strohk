@@ -1,23 +1,38 @@
 <template>
   <div class="container">
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron" v-if="!$parent.authenticated">
-        <h1>Hello, stranger</h1>
-        <p>We'll do it real quick. Please sign in first !</p>
+    <div class="row">
+      <div class="col-sm-3 item" v-for="assignment in assignments">
+        <h4><a href="#" v-link="{ path: '/assignment/'+assignment.id }">{{ assignment.name }}</a></h4>
+        <p>{{ assignment.description | truncate 60 }}</p>
       </div>
-      <div class="jumbotron" v-if="!$parent.authenticated">
-        <h1>Waddup, {{ $parent.user.name }}</h1>
-        <p>Check out assignments</p>
-      </div>
-
-    </div> <!-- /container -->
+    </div>
+    </div>
+  </div>
 </template>
-
+<style lang="sass">
+  .item {
+    min-height: 130px;
+  }
+</style>
 <script>
 export default {
-  data () {
+  data: function () {
     return {
+      assignments: []
     }
+  },
+  ready: function () {
+    var self = this;
+    this.$http.get(self.$parent.route('assignment.index'), {}, {
+      headers: {
+        'Authorization': self.$parent.getAuthorizationHeader()
+      }
+    }).then(function (response) {
+      if (!response.data) {
+        return;
+      }
+      this.assignments = response.data
+    })
   }
 }
 </script>

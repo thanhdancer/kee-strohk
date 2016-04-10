@@ -31,4 +31,14 @@ class User extends Model implements
     protected $hidden = [
         'password',
     ];
+
+    public function assignments()
+    {
+        return $this->belongsToMany(Assignment::class, 'submissions');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }
