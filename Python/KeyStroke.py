@@ -5,20 +5,14 @@ import sys
 words = pandas.DataFrame.from_csv('word_count.txt', index_col=None)
 chars = pandas.DataFrame.from_csv('1gram.txt', index_col=None)
 bigrams = pandas.DataFrame.from_csv('2gram.txt', index_col=None)
-<<<<<<< HEAD
-data = pandas.DataFrame.from_csv('cong.txt', index_col=None)
-number_of_column = 26
-=======
 data = pandas.DataFrame.from_csv(sys.argv[1], index_col=None)
 raw = pandas.DataFrame.from_csv(sys.argv[1], index_col=None)
->>>>>>> haidt4
 
 #calculate F1:
 F1 = data['KeyCode']
 F1 = pandas.DataFrame(F1, columns=['KeyCode'])
 F1['duration'] = data['KeyUp'] - data['KeyDown']
 F1['delay'] = 0
-F1['name'] = sys.argv[1].split('.')[0]
 
 #calculate F2, F3:
 <<<<<<< HEAD
@@ -183,4 +177,3 @@ dataFrame = pandas.DataFrame(misWords, index=None, columns=['misWords'])
 F1['misWords'] = dataFrame.as_matrix()
 F1['name'] = sys.argv[1].split('.')[0]
 F1.to_csv('Feature_%s' % sys.argv[1], index=False)
->>>>>>> haidt4

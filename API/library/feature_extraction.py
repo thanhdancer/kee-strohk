@@ -1,26 +1,30 @@
 import pandas
 
+
 class FeatureExtraction:
-    def __init__(self, wordcount_path, one_gram_path, two_gram_path, data, total_records=26):
+    def __init__(self, data, total_records=26):
         # read file
-        self.words = pandas.DataFrame.from_csv('word_count.txt', index_col=None)
-        self.chars = pandas.DataFrame.from_csv('1gram.txt', index_col=None)
-        self.bigrams = pandas.DataFrame.from_csv('2gram.txt', index_col=None)
-        self.data = pandas.DataFrame.from_csv('hien.txt', index_col=None)
+        self.data = pandas.DataFrame.from_csv(data, index_col=None)
+        self.raw = pandas.DataFrame.from_csv(data, index_col=None)
         self.number_of_column = total_records
 
     def _calcualte_f1(self):
         # calculate F1:
-        data1 = self.data[self.data['KeyCode'] > 32]
-        data1 = data1[data1['KeyCode'] < 127]
 
-        F1 = data1['KeyCode']
+        F1 = self.data['KeyCode']
         F1 = pandas.DataFrame(F1, columns=['KeyCode'])
-        F1['duration'] = data1['KeyUp'] - data1['KeyDown']
-        F1 = F1.groupby('KeyCode', as_index=False).mean()
-        F1['KeyCode'] = F1['KeyCode'].map(chr)
+        F1['duration'] = self.data['KeyUp'] - self.data['KeyDown']
+        F1['delay'] = 0
+
+        listHai = self.data.values.T.tolist()
+        length = len(listHai[0])
+
+        for index1 in xrange(length):
+            if index1 != 0:
+                F1.set_value(index1, 'delay', listHai[1][index1] - listHai[2][index1 - 1])
+
         return F1
-        #F1.to_csv('F1.txt', index=False)
+        # F1.to_csv('F1.txt', index=False)
 
     def _calculate_f2_f3(self):
         # calculate F2, F3:
@@ -70,7 +74,6 @@ class FeatureExtraction:
         # F2.to_csv('F2.txt', index=False)
         # F3.to_csv('F3.txt', index=False)
 
-
     def _calculate_f4(self):
         # calculate F4
         data4 = self.data['KeyCode']
@@ -112,3 +115,78 @@ class FeatureExtraction:
         F4.set_value(F4[F4['duration'].isnull()].index, 'duration', 0)
         return F4
         # F4.to_csv('F4.txt', index=False)
+
+    def _calculate_mis_word(self):
+        backSpaceKeyCode = 8
+        shiftKeyCode = 16
+        count = 0
+        flag = False
+        i = 0
+        list0 = self.raw['KeyCode'].values.tolist()
+        myDict = {}
+        misWords = [0] * len(list0)
+
+        while i < len(list0):
+            if list0[i] == backSpaceKeyCode:
+                flag = True
+                key = i
+                count = count + 1
+                while flag == True and i < len(list0) - 1:
+                    i = i + 1
+                    if list0[i] == backSpaceKeyCode:
+                        count = count + 1
+                    else:
+                        myDict[key] = count
+                        flag = False
+                        count = 0
+            else:
+                count = 0
+            i += 1
+
+        listValue = myDict.values()
+        listKey = myDict.keys()
+        indexOfMiswordArray = 0
+        indexOdReplace = 0
+        list1 = list0
+        for hihi in range(len(list1)):
+            if list0[hihi] == backSpaceKeyCode:
+                list1[hihi] = None
+
+        # get all delete record
+        for iDict in range(len(myDict)):
+            number = 0
+            index = 0
+            while number < listValue[iDict] and listKey[iDict] - index > 0:
+                index += 1
+                if list1[listKey[iDict] - index] != None:
+                    number += 1
+                    if listKey[iDict] - index - 1 > 0 and list1[listKey[iDict] - index - 1] == shiftKeyCode:
+                        misWords[listKey[iDict] - index - 1] = 1
+                        list1[listKey[iDict] - index - 1] = None
+                    misWords[listKey[iDict] - index] = 1
+                    list1[listKey[iDict] - index] = None
+
+        # get all replace record
+        for iDict in range(len(myDict)):
+            number = 0
+            index = 0
+            while number < listValue[iDict] and listKey[iDict] + index < len(list0):
+                index += 1
+                if list1[listKey[iDict] + index] != None:
+                    number += 1
+                    misWords[listKey[iDict] + index] = 1;
+                    if listKey[iDict] + index + 1 < len(list0) and list1[listKey[iDict] + index] == shiftKeyCode:
+                        misWords[listKey[iDict] + index + 1] = 1;
+                        list1[listKey[iDict] + index + 1] = None
+                    list1[listKey[iDict] + index] = None
+
+        return misWords
+
+    def get_features(self):
+        feature_frame = self._calcualte_f1()
+        mis_words = pandas.DataFrame(self._calculate_mis_word(), index=None, columns=['misWords'])
+        print feature_frame
+        print mis_words
+        feature_frame['misWords'] = mis_words.as_matrix()
+        return feature_frame
+
