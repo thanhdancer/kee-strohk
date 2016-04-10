@@ -8,7 +8,7 @@ Generate samples
 An experiment for Assignment System with Keystroke integrated
 
 ### Data processing
-Checkout [this](https://github.com/thanhdancer/kee-strohk/tree/haidt4), [this](https://github.com/thanhdancer/kee-strohk/tree/Cong-Tu) and [this](https://github.com/thanhdancer/kee-strohk/tree/thanhdancer)
+Checkout branches: [this](https://github.com/thanhdancer/kee-strohk/tree/haidt4), [this](https://github.com/thanhdancer/kee-strohk/tree/Cong-Tu) and [this](https://github.com/thanhdancer/kee-strohk/tree/thanhdancer)
 
 ### Documentation
 Each component should contain its own documention. Checkout README.md(s) !
