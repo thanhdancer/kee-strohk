@@ -15,7 +15,9 @@ export default {
         'home': '/home',
         'login': '/api/v1/login',
         'assignment.index': '/api/v1/assignments',
-        'assignment.show': '/api/v1/assignment/{id}'
+        'assignment.show': '/api/v1/assignment/{id}',
+        'assignment.do': '/api/v1/assignment/{id}/submission',
+        'submission.edit': '/api/v1/submission/{id}/edit',
       },
       user: storage.storage.fetch('exam-keystroke:user')
     }
@@ -35,8 +37,15 @@ export default {
     }
   },
   methods: {
-    route: function (name) {
-      return this.uri.base + this.routes[name];
+    route: function (name, params) {
+      var url = this.uri.base + this.routes[name];
+      if (!params) {
+        return url;
+      }
+      for (param in params) {
+        url = url.replace(new RegExp('{'+param+'}', 'g'), params[param])
+      }
+      return url;
     },
     authenticate: function (user) {
       this.user = user;

@@ -23,11 +23,7 @@ export default {
   },
   ready: function () {
     var self = this;
-    this.$http.get(self.$parent.route('assignment.index'), {}, {
-      headers: {
-        'Authorization': self.$parent.getAuthorizationHeader()
-      }
-    }).then(function (response) {
+    this.$http.get(self.$parent.route('assignment.index')).then(function (response) {
       if (!response.data) {
         return;
       }
